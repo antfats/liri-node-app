@@ -1,0 +1,23 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "App for class",
+  "main": "key.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfats/liri-node-app.git"
+  },
+  "keywords": [
+    "class",
+    "homework"
+  ],
+  "author": "Anthony Fatato",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/antfats/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/antfats/liri-node-app#readme"
+}
