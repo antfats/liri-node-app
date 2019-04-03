@@ -1,18 +1,10 @@
-var userInput = process.argv[2];
-
-src = "https://sdk.scdn.co/spotify-player.js"
 require("dotenv").config();
+var userInput = process.argv[2];
+var qs = require("query-string")
+src = "https://sdk.scdn.co/spotify-player.js"
+
+
 var keys = require("./key");
-
-//movie package!
-var axios = require("axios");
-axios.get("http://www.omdbapi.com/?t=zombieland&y=&plot=short&apikey=ae0bd42b").then(function (response) {
-  // console.log(response);
-
-});
-//------------------------------------------------------------
-
-//spotify web api initialize
 var SpotifyWebApi = require('spotify-web-api-node');
 var spotifyApi = new SpotifyWebApi({
   clientId: 'fcecfc72172e4cd267473117a17cbd4d',
@@ -25,17 +17,42 @@ spotifyApi.setAccessToken(keys.spotify.id);
 
 
 if (userInput === "concert-this") {
-  // for (var i = 3; i < process.argv.length; i++) {
-  //   var songWords = process.argv[i];
-  //   var songString = "";
-  //   var songString = + songWords;
-  // }
-  // console.log(parseInt(songString));
-
-  axios.get("https://rest.bandsintown.com/artists/LilPump/events?app_id=" + keys.bands.id).then(function (response) {
-    console.log(response.data[1].venue.name);
-    console.log(response.data[1].datetime);
+  var artist = process.argv
+  artist = artist.slice(3)
+  artist = artist.join();
+  artist = artist.replace(",","%")
+  var axios = require("axios");
+  var apikey =process.env.BANDS_ID;
+  console.log(artist);
+  axios.get("https://rest.bandsintown.com/artists/" + artist + "?app_id=99ab2666-e9aa-4536-abb6-4994b7cb5f98").then(function (response) {
+    console.log(response);
+  
+    // console.log(response.data[1].venue.name);
+    // console.log(response.data[1].datetime);
   });
+
+}
+
+//movie-this!!!
+else if (userInput === "movie-this") {
+  var axios = require("axios");
+  var movie = process.argv;
+
+  axios.get("http://www.omdbapi.com/?t=" + (movie.slice(3)) + "&y=&plot=short&apikey=ae0bd42b").then(function (response) {
+    var title = response.data.Title;
+    var year = response.data.Year;
+    var IMDBrating = response.data.imdbRating;
+    var rottenScore = response.data.Ratings[1].Value;
+    console.log("Title: " + title);
+    console.log("Year: " + year);
+    console.log("IMDBRating: " + IMDBrating);
+    console.log("Rotten Tomatos score: " + rottenScore)
+
+  });
+}
+//-------------------------------------------------------------------
+
+else if (userInput === "spotify-this") {
 
 }
 
