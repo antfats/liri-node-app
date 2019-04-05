@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/antfats/liri-node-app#readme",
   "dependencies": {
+    "moment": "^2.24.0",
     "node": "^11.12.0",
     "query-string": "^6.4.2"
   }
