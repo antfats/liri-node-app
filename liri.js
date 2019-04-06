@@ -1,3 +1,5 @@
+var buf = new Buffer(10);
+var fs = require('fs');
 require("dotenv").config();
 var moment = require('moment');
 moment().format();
@@ -6,15 +8,14 @@ var qs = require("query-string")
 var keys = require("./key");
 var SpotifyWebApi = require('spotify-web-api-node');
 var axios = require("axios");
+var Spotify = require('node-spotify-api');
 
-
-
-var spotifyApi = new SpotifyWebApi({
-  clientId: 'fcecfc72172e4cd267473117a17cbd4d',
-  clientSecret: 'a6338157c9bb5ac9c71924cb2940e1a7',
-  redirectUri: 'http://www.example.com/callback'
+var spotify = new Spotify({
+  id: '2832fb971a59437e9d30087877ff297c',
+  secret: 'cd3d6bbd625f4ffeb2c14511f7052068'
 });
-spotifyApi.setAccessToken(keys.spotify.id);
+
+
 //------------------------------------------------------------
 
 
@@ -31,13 +32,13 @@ if (userInput === "concert-this") {
     var date = response.data[1].datetime;
     var dateObject = moment(date, "YYYY-MM-DD")
     dateObject = moment(dateObject).toDate("YYYY-MM-DD")
-  var city = response.data[1].venue.city;
-  console.log(response.data[1].venue.name);
-  console.log("\nCity: " + city);
-  console.log("\nCountry: " + response.data[1].venue.country);
-  console.log("\nDate: " + (dateObject));
-});
-//-----------------------------------------------------------------------------------------------------------------
+    var city = response.data[1].venue.city;
+    console.log(response.data[1].venue.name);
+    console.log("\nCity: " + city);
+    console.log("\nCountry: " + response.data[1].venue.country);
+    console.log("\nDate: " + (dateObject));
+  });
+  //-----------------------------------------------------------------------------------------------------------------
 }
 
 //movie-this!!!
@@ -57,11 +58,49 @@ else if (userInput === "movie-this") {
   });
 }
 //-------------------------------------------------------------------
-
 else if (userInput === "spotify-this") {
 
 }
+function spotifyThis() {
+  var song = process.argv
+  song = song.slice(3);
+  song = song.toString();
+  song = song.replace(",", " ");
+  spotify.search({ type: 'track', query: song }, function (err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
 
+    //Trying to get the album name to show up
+
+    // console.log(data.tracks.items[1]);
+    // console.log(data.tracks.items[1]);
+    // console.log("Album Name: "+data.tracks.items[1])
+
+    // console.log("Song Preview: " + data.tracks.items[1].preview_url);
+    // console.log("Song Name: " + data.tracks.items[1].name);
+    console.log(data.tracks.items[1]);
+  });
+}
+// else if (userInput === "do-what-it-says") {
+//   fs.readFile("./random.txt", (err, data) => {
+//     if (err) throw err;
+//     else {
+//       var info = buf.toJSON("" + data + "");
+//       console.log(info);
+//     }
+//   })
+if (userInput === "do-what-it-says")
+  try {
+    var data = fs.readFileSync('./random.txt', 'utf8');
+    console.log(data);
+    process.argv[2] = data
+    song = data;
+    return song;
+    spotifyThis(song);
+  } catch (e) {
+    console.log('Error:', e.stack);
+  }
 
 
 
